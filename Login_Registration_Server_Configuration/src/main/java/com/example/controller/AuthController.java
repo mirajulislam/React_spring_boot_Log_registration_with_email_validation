@@ -123,6 +123,12 @@ public class AuthController {
 
 		user.setRoles(roles);
 		userRepository.save(user);
+		SendEmail(user);
+
+		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+	}
+
+	private void SendEmail(User user) {
 		ConfirmationToken confirmationToken = new ConfirmationToken(user);
 
 		confirmationTokenRepository.save(confirmationToken);
@@ -135,8 +141,7 @@ public class AuthController {
 				+ "http://localhost:8080/confirm-account?token=" + confirmationToken.getConfirmationToken());
 
 		emailSenderService.sendEmail(mailMessage);
-
-		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+		
 	}
-
+	
 }
